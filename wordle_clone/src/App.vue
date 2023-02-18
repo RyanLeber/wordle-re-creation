@@ -1,9 +1,18 @@
+<!-- eslint-disable prettier/prettier -->
 <script setup>
+import { ref } from "vue"
 import { RouterLink, RouterView } from "vue-router";
-import HelloWorld from "./components/HelloWorld.vue";
+import UserInput from "./components/UserInput.vue";
+
+const answer = ref('')
+const getValue = (e) => {
+  answer.value = e.value;
+  console.log('testing: ', answer.value)
+};
 </script>
 
 <template>
+  <UserInput @response="getValue" />
   <header>
     <img
       alt="Vue logo"
@@ -14,12 +23,10 @@ import HelloWorld from "./components/HelloWorld.vue";
     />
 
     <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
       <nav>
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/about">About</RouterLink>
-        <RouterLink to="/wordle">wordle</RouterLink>
+        <RouterLink to="/wordle">Wordle</RouterLink>
       </nav>
     </div>
   </header>
@@ -39,10 +46,11 @@ header {
 }
 
 nav {
-  width: 100%;
+  width: 100vw;
   font-size: 12px;
   text-align: center;
   margin-top: 2rem;
+  background-color: rgb(36, 52, 66);
 }
 
 nav a.router-link-exact-active {
@@ -82,11 +90,9 @@ nav a:first-of-type {
 
   nav {
     text-align: left;
-    margin-left: -1rem;
     font-size: 1rem;
 
     padding: 1rem 0;
-    margin-top: 1rem;
   }
 }
 </style>

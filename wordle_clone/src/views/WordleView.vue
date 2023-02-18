@@ -1,9 +1,7 @@
 <script setup>
-import WordleInput from "WordleInput.vue";
+import WordleInput from "../components/WordleInput.vue";
 </script>
 
 <template>
-  <main>
-    <WordleInput />
-  </main>
+  <WordleInput />
 </template>
