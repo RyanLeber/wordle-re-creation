@@ -6,21 +6,23 @@ import UserInput from "./components/UserInput.vue";
 import WordleInput from "./components/WordleInput.vue";
 
 const titleClass =ref('title')
-const answer = ref('')
+const answer = ref([])
 const getValue = (e) => {
-  answer.value = e.value;
-  console.log('testing: ', answer.value)
+  answer.value = e;
+  //console.log('testing: ', answer.value)
 };
 </script>
 
 <template>
-  <UserInput @response="getValue" />
   <header>
     <nav>
       <h1 :class="titleClass">Wordle</h1>
     </nav>
   </header>
-  <WordleInput :guess="answer" />
+  <main>
+    <UserInput @response="getValue" />
+    <WordleInput :guess="answer" />
+  </main>
 </template>
 
 <style scoped>
@@ -35,8 +37,12 @@ nav {
 .title {
   color: var(--primary-text-color);
   font-weight: 700;
-  font-size: 4rem;
+  font-size: 2rem;
   font-family: var(--title-font);
   font-weight: var(--title-weight);
+}
+
+main  {
+  align-items: center;
 }
 </style>
