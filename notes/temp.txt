@@ -81,3 +81,25 @@ function parseAnswer() {
 function displayGuess() {
   console.log(letterArray.value);
 }
+
+= answer.value.slice(0, answer.value.length - 1)
+
+
+let n = ref(0);
+
+const nextRow = (event) =>{
+  if (event.key === "Enter" && n.value < 5) {
+    //if(letterArray.value.length % 5 === 0) {
+      n.value++;
+      console.log(n.value)
+    //}
+  }
+}
+
+onMounted(() => {
+  document.addEventListener('keydown', nextRow);
+})
+onBeforeUnmount(() => {
+  document.removeEventListener('keydown', nextRow);
+  n.value = 0;
+})
