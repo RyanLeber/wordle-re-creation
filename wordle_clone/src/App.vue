@@ -1,9 +1,11 @@
 <!-- eslint-disable prettier/prettier -->
 <script setup>
 import { ref } from "vue"
-import { RouterLink, RouterView } from "vue-router";
+//import { RouterLink, RouterView } from "vue-router";
 import UserInput from "./components/UserInput.vue";
+import WordleInput from "./components/WordleInput.vue";
 
+const titleClass =ref('title')
 const answer = ref('')
 const getValue = (e) => {
   answer.value = e.value;
@@ -14,85 +16,27 @@ const getValue = (e) => {
 <template>
   <UserInput @response="getValue" />
   <header>
-    <img
-      alt="Vue logo"
-      class="logo"
-      src="@/assets/logo.svg"
-      width="125"
-      height="125"
-    />
-
-    <div class="wrapper">
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-        <RouterLink to="/wordle">Wordle</RouterLink>
-      </nav>
-    </div>
+    <nav>
+      <h1 :class="titleClass">Wordle</h1>
+    </nav>
   </header>
-
-  <RouterView />
+  <WordleInput :guess="answer" />
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
 nav {
-  width: 100vw;
-  font-size: 12px;
+  background-color: rgb(121, 171, 154);
+  margin-top: 0%;
+  border-bottom: 2px;
+  border-color: var(--border-color);
   text-align: center;
-  margin-top: 2rem;
-  background-color: rgb(36, 52, 66);
 }
 
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-  }
+.title {
+  color: var(--primary-text-color);
+  font-weight: 700;
+  font-size: 4rem;
+  font-family: var(--title-font);
+  font-weight: var(--title-weight);
 }
 </style>
