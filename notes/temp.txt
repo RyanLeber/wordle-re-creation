@@ -77,3 +77,7 @@ function parseAnswer() {
   let chars = answer.value.split('');
 }
 </script>
+
+function displayGuess() {
+  console.log(letterArray.value);
+}
