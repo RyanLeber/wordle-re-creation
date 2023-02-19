@@ -1,14 +1,35 @@
 <!-- eslint-disable prettier/prettier -->
 <!-- eslint-disable prettier/prettier -->
 <script setup>
-import { ref } from "vue"
-import UserInput from "../components/UserInput.vue";
+import { reactive, ref, onMounted, onBeforeUnmount, defineComponent } from 'vue';
 
-const temp = ref(UserInput.value)
+const props = defineProps({
+  guess: String
+})
+const temp = ref(props.guess)
+//const letterArray = reactive([]);
+//lettersArray.value = props.guess.split('')
+//const currentRow = ref(['row1', 'row2', 'row3', 'row4', 'row5', 'row6']);
+let n = ref(0);
+//let guesses = [];
+console.log('temp: ', temp)
 
-console.log("test: ", temp.value)
+const nextRow = (event) =>{
+  if (event.key === "Enter" && n.value < 5) {
+    if(letterArray.value.length % 5 === 0) {
+      n.value++;
+      console.log(n)
+    }
+  }
+}
 
-
+onMounted(() => {
+  document.addEventListener('keydown', nextRow);
+})
+onBeforeUnmount(() => {
+  document.removeEventListener('keydown', nextRow);
+  n.value = 0;
+})
 </script>
 
 <template>
@@ -76,16 +97,17 @@ console.log("test: ", temp.value)
   }
   .answer-item {
     border: 2px solid;
+    border-color: var(--border-color);
     width: 100%;
     display: inline-flex;
     justify-content: center;
     align-items: center;
     font-size: 2rem;
     line-height: 1;
-    font-weight: bold;
+    font-family: var(--guess-font);
+    font-weight: var(--guess-weight);
     vertical-align: middle;
     box-sizing: border-box;
-    color: rgb(67, 67, 67);
     text-transform: uppercase;
     -webkit-user-select: none;
     -moz-user-select: none;
