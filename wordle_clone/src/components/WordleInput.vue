@@ -56,6 +56,9 @@ defineProps({
 
 <style scoped>
 @media (min-width: 1024px) {
+  .container {
+    display: flex;
+  }
   .answer-grid {
     padding: 10px;
     display: grid;
