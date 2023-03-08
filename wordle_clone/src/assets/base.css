@@ -17,7 +17,13 @@
   'Zen Kaku Gothic Antique', sans-serif;
   --guess-weight: black 900;
 }
+.app {
+  position: relative;
+}
 
 body {
   background-color: var(--bg-color);
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
