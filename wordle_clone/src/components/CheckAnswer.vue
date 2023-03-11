@@ -1,8 +1,51 @@
 <!-- eslint-disable prettier/prettier -->
 <script setup>
-import { reactive } from 'vue';
+import { reactive, onUpdated } from 'vue';
 
-const answer = reactive({answer: ''});
+const getAnswer = reactive({answer: ''});
+
+const getGuess = defineProps({
+  checkGuess: String
+})
+
+//const emit = defineEmits([5])
+
+onUpdated(() => {
+  let guess = getGuess['checkGuess'];
+  let answer = getAnswer.answer.word;
+  if (guess.length > 0 && answer.length > 0) {
+    const checkArr = [5];
+    let count = 0;
+    console.log('answer: ', answer);
+    console.log('guess: ', guess);
+    for (let i = 0; i < 5; i++) {
+      let temp = count;
+      for (let j = 0; j < 5; j++) {
+        if (guess[i] === answer[j]) {
+          if (i === j) {
+            checkArr[i] = 'sameIndex';
+          }
+          else {
+            checkArr[i] = 'hasletter';
+          }
+          count = count + 1;
+        }
+      }
+      if (temp === count) {
+        checkArr[i] = 'notIn';
+      }
+    }
+    if (count === 5) {
+      console.log('correct');
+    }
+    else {
+      console.log('incorrect, count: ', count);
+    }
+    console.log(checkArr)
+    //emit(checkArr)
+  }
+})
+
 
 async function getWord() {
   const options = {
@@ -16,8 +59,8 @@ async function getWord() {
     'https://wordsapiv1.p.rapidapi.com/words/?random=true&letters=5',
     options
   );
-  answer.answer = await res.json();
-  console.log(answer.answer.word)
+  getAnswer.answer = await res.json();
+  console.log(getAnswer.answer.word)
 }
 </script>
 
