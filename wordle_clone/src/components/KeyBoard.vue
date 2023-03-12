@@ -1,41 +1,53 @@
 <!-- eslint-disable prettier/prettier -->
+<script setup>
+const emits = defineEmits(['key']);
+defineProps({
+  checkKey: Array
+});
+
+const getKey = (event) => {
+  event.target.blur();
+  emits('key', event.target.innerHTML);
+}
+</script>
+
 <template>
   <div class="keyboard-container">
     <div class="key-row">
-      <button type="button" @click="$emit('key', 'q')" class="key-key">q</button>
-      <button type="button" @click="$emit('key', 'w')" class="key-key">w</button>
-      <button type="button" @click="$emit('key', 'e')" class="key-key">e</button>
-      <button type="button" @click="$emit('key', 'r')" class="key-key">r</button>
-      <button type="button" @click="$emit('key', 't')" class="key-key">t</button>
-      <button type="button" @click="$emit('key', 'y')" class="key-key">y</button>
-      <button type="button" @click="$emit('key', 'u')" class="key-key">u</button>
-      <button type="button" @click="$emit('key', 'i')" class="key-key">i</button>
-      <button type="button" @click="$emit('key', 'o')" class="key-key">o</button>
-      <button type="button" @click="$emit('key', 'p')" class="key-key">p</button>
+      <button type="button" @click="getKey" class="key-key">q</button>
+      <button type="button" @click="getKey" class="key-key">w</button>
+      <button type="button" @click="getKey" class="key-key">e</button>
+      <button type="button" @click="getKey" class="key-key">r</button>
+      <button type="button" @click="getKey" class="key-key">t</button>
+      <button type="button" @click="getKey" class="key-key">y</button>
+      <button type="button" @click="getKey" class="key-key">u</button>
+      <button type="button" @click="getKey" class="key-key">i</button>
+      <button type="button" @click="getKey" class="key-key">o</button>
+      <button type="button" @click="getKey" class="key-key">p</button>
     </div>
     <div class="key-row">
       <div data-spacer="spacer" class="key-spacer"></div>
-      <button type="button" @click="$emit('key', 'a')" class="key-key">a</button>
-      <button type="button" @click="$emit('key', 's')" class="key-key">s</button>
-      <button type="button" @click="$emit('key', 'd')" class="key-key">d</button>
-      <button type="button" @click="$emit('key', 'f')" class="key-key">f</button>
-      <button type="button" @click="$emit('key', 'g')" class="key-key">g</button>
-      <button type="button" @click="$emit('key', 'h')" class="key-key">h</button>
-      <button type="button" @click="$emit('key', 'j')" class="key-key">j</button>
-      <button type="button" @click="$emit('key', 'k')" class="key-key">k</button>
-      <button type="button" @click="$emit('key', 'l')" class="key-key">l</button>
+      <button type="button" @click="getKey" class="key-key">a</button>
+      <button type="button" @click="getKey" class="key-key">s</button>
+      <button type="button" @click="getKey" class="key-key">d</button>
+      <button type="button" @click="getKey" class="key-key">f</button>
+      <button type="button" @click="getKey" class="key-key">g</button>
+      <button type="button" @click="getKey" class="key-key">h</button>
+      <button type="button" @click="getKey" class="key-key">j</button>
+      <button type="button" @click="getKey" class="key-key">k</button>
+      <button type="button" @click="getKey" class="key-key">l</button>
       <div data-spacer="spacer" class="key-spacer"></div>
     </div>
     <div class="key-row">
-      <button type="button" @click="$emit('key', 'enter')" class="key-key key-enter">enter</button>
-      <button type="button" @click="$emit('key', 'z')" class="key-key">z</button>
-      <button type="button" @click="$emit('key', 'x')" class="key-key">x</button>
-      <button type="button" @click="$emit('key', 'c')" class="key-key">c</button>
-      <button type="button" @click="$emit('key', 'v')" class="key-key">v</button>
-      <button type="button" @click="$emit('key', 'b')" class="key-key">b</button>
-      <button type="button" @click="$emit('key', 'n')" class="key-key">n</button>
-      <button type="button" @click="$emit('key', 'm')" class="key-key">m</button>
-      <button type="button" @click="$emit('key', 'backspace')" class="key-key key-remove">del</button>
+      <button type="button" @click="getKey" class="key-key key-enter">enter</button>
+      <button type="button" @click="getKey" class="key-key">z</button>
+      <button type="button" @click="getKey" class="key-key">x</button>
+      <button type="button" @click="getKey" class="key-key">c</button>
+      <button type="button" @click="getKey" class="key-key">v</button>
+      <button type="button" @click="getKey" class="key-key">b</button>
+      <button type="button" @click="getKey" class="key-key">n</button>
+      <button type="button" @click="getKey" class="key-key">m</button>
+      <button type="button" @click="getKey" class="key-key key-remove">del</button>
     </div>
   </div>
 </template>
