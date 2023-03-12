@@ -3,7 +3,7 @@
 <script setup>
 defineProps({
   guesses: Array,
-  checkKey: Array
+  checkObject: Object
 });
 </script>
 
