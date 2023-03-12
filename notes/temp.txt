@@ -1,105 +1,247 @@
+<script setup>
+import WordleInput from "../components/WordleInput.vue";
+import KeyBoard from "../components/KeyBoard.vue";
+import CheckAnswer from "../components/CheckAnswer.vue";
+import { ref, reactive, onMounted, onBeforeUnmount } from 'vue'
+// change to reactive
+const letters = reactive({arr: []});
+//const emit = defineEmits(['response']);
+const currentGuess = ref(0);
+const lettersAmount = ref(5);
+const check = ref('');
+
+function updateLetters(key) {
+  // New letter method
+  if (letters.arr.length < lettersAmount.value && /^[a-zA-Z]$/.test(key)) {
+    letters.arr.push(key);
+  }
+  // Backspace method
+  else if (key === "backspace") {
+    if (letters.arr.length > lettersAmount.value - 5) {
+      letters.arr.pop();
+    }
+  }
+  // Enter method
+  else if (key === "enter" && currentGuess.value < 6) {
+    if(letters.arr.length % 5 === 0) {
+      check.value = '';
+      for (let i = letters.arr.length - 5; i < lettersAmount.value; i++){
+        check.value += letters.arr[i];
+      }
+      console.log('1: ', check.value)
+      currentGuess.value++;
+      lettersAmount.value += 5;
+    }
+  }
+}
+
+const handleKeydown = (event) => {
+  // New letter method
+  if (letters.arr.length < lettersAmount.value && /^[a-zA-Z]$/.test(event.key)) {
+    letters.arr.push(event.key);
+  }
+  // Backspace method
+  else if (event.key === "Backspace") {
+    if (letters.arr.length > lettersAmount.value - 5) {
+      letters.arr.pop();
+    }
+  }
+  // Enter method
+  else if (event.key === "Enter" && currentGuess.value < 6) {
+    if(letters.arr.length % 5 === 0) {
+      check.value = '';
+      for (let i = letters.arr.length - 5; i < lettersAmount.value; i++){
+        check.value += letters.arr[i];
+      }
+      console.log('2: ', check.value)
+      currentGuess.value++;
+      lettersAmount.value += 5;
+    }
+  }
+}
+
+onMounted(() => {
+  document.addEventListener('keydown', handleKeydown);
+})
+onBeforeUnmount(() => {
+  document.removeEventListener('keydown', handleKeydown);
+  currentGuess.value = 0;
+})
+</script>
+
 <template>
-  <div class="input-grid">
-    <div class="answer1" style="grid-area: 1 / 1 / 1 / span 5">
-      <input class="input" type="text" size="1" maxlength="1" />
-      <input class="input" type="text" size="1" maxlength="1" />
-      <input class="input" type="text" size="1" maxlength="1" />
-      <input class="input" type="text" size="1" maxlength="1" />
-      <input class="input" type="text" size="1" maxlength="1" />
+  <div class="input-container">
+    <WordleInput :guess="letters.arr" />
+  </div>
+  <div class="keyboard-container">
+    <KeyBoard @key="updateLetters" />
+  </div>
+  <div>
+    <CheckAnswer :check-guess="check" />
+  </div>
+</template>
+
+
+
+
+
+
+
+<!-- eslint-disable prettier/prettier -->
+<!-- eslint-disable prettier/prettier -->
+<script setup>
+defineProps({
+  guess: Array
+})
+</script>
+
+<template>
+  <div class="answer-grid">
+    <div class="answer-row" id="row1">
+      <div class="answer-item">{{ guess[0] }}</div>
+      <div class="answer-item">{{ guess[1] }}</div>
+      <div class="answer-item">{{ guess[2] }}</div>
+      <div class="answer-item">{{ guess[3] }}</div>
+      <div class="answer-item">{{ guess[4] }}</div>
     </div>
-    <div class="answer2" style="grid-area: 2 / 1 / 2 / span 5">
-      <input class="input" type="text" size="1" maxlength="1" />
-      <input class="input" type="text" size="1" maxlength="1" />
-      <input class="input" type="text" size="1" maxlength="1" />
-      <input class="input" type="text" size="1" maxlength="1" />
-      <input class="input" type="text" size="1" maxlength="1" />
+    <div class="answer-row" id="row2">
+      <div class="answer-item">{{ guess[5] }}</div>
+      <div class="answer-item">{{ guess[6] }}</div>
+      <div class="answer-item">{{ guess[7] }}</div>
+      <div class="answer-item">{{ guess[8] }}</div>
+      <div class="answer-item">{{ guess[9] }}</div>
     </div>
-    <div class="answer3" style="grid-area: 3 / 1 / 3 / span 5">
-      <input class="input" type="text" size="1" maxlength="1" />
-      <input class="input" type="text" size="1" maxlength="1" />
-      <input class="input" type="text" size="1" maxlength="1" />
-      <input class="input" type="text" size="1" maxlength="1" />
-      <input class="input" type="text" size="1" maxlength="1" />
+    <div class="answer-row" id="row3">
+      <div class="answer-item">{{ guess[10] }}</div>
+      <div class="answer-item">{{ guess[11] }}</div>
+      <div class="answer-item">{{ guess[12] }}</div>
+      <div class="answer-item">{{ guess[13] }}</div>
+      <div class="answer-item">{{ guess[14] }}</div>
     </div>
-    <div class="answer4" style="grid-area: 4 / 1 / 4 / span 5">
-      <input class="input" type="text" size="1" maxlength="1" />
-      <input class="input" type="text" size="1" maxlength="1" />
-      <input class="input" type="text" size="1" maxlength="1" />
-      <input class="input" type="text" size="1" maxlength="1" />
-      <input class="input" type="text" size="1" maxlength="1" />
+    <div class="answer-row" id="row4">
+      <div class="answer-item">{{ guess[15] }}</div>
+      <div class="answer-item">{{ guess[16] }}</div>
+      <div class="answer-item">{{ guess[17] }}</div>
+      <div class="answer-item">{{ guess[18] }}</div>
+      <div class="answer-item">{{ guess[19] }}</div>
     </div>
-    <div class="answer5" style="grid-area: 5 / 1 / 5 / span 5">
-      <input class="input" type="text" size="1" maxlength="1" />
-      <input class="input" type="text" size="1" maxlength="1" />
-      <input class="input" type="text" size="1" maxlength="1" />
-      <input class="input" type="text" size="1" maxlength="1" />
-      <input class="input" type="text" size="1" maxlength="1" />
+    <div class="answer-row" id="row5">
+      <div class="answer-item">{{ guess[20] }}</div>
+      <div class="answer-item">{{ guess[21] }}</div>
+      <div class="answer-item">{{ guess[22] }}</div>
+      <div class="answer-item">{{ guess[23] }}</div>
+      <div class="answer-item">{{ guess[24] }}</div>
     </div>
-    <div class="answer6" style="grid-area: 6 / 1 / 6 / span 5">
-      <input class="input" type="text" size="1" maxlength="1" />
-      <input class="input" type="text" size="1" maxlength="1" />
-      <input class="input" type="text" size="1" maxlength="1" />
-      <input class="input" type="text" size="1" maxlength="1" />
-      <input class="input" type="text" size="1" maxlength="1" />
+    <div class="answer-row" id="row6">
+      <div class="answer-item">{{ guess[25] }}</div>
+      <div class="answer-item">{{ guess[26] }}</div>
+      <div class="answer-item">{{ guess[27] }}</div>
+      <div class="answer-item">{{ guess[28] }}</div>
+      <div class="answer-item">{{ guess[29] }}</div>
     </div>
   </div>
 </template>
 
-<style>
+<style scoped>
 @media (min-width: 1024px) {
-  .input-grid {
-    padding: 10px;
-    background-color: aliceblue;
-    display: grid;
-    grid-auto-columns: 128px;
-    row-gap: 10px;
+  .container {
+    display: flex;
   }
-  .input {
-    font-size: 3em;
-    background: none;
+  .answer-grid {
+    padding: 10px;
+    display: grid;
+    grid-template-rows: repeat(6, 1fr);
+    grid-gap: 5px;
+    box-sizing: border-box;
+    width: 300px;
+    height: 360px;
+  }
+  .answer-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-gap: 5px;
+  }
+  .answer-item {
+    border: 2px solid;
+    border-color: var(--border-color);
+    width: 100%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    line-height: 1;
+    font-family: var(--guess-font);
+    font-weight: var(--guess-weight);
+    color: white;
+    vertical-align: middle;
+    box-sizing: border-box;
+    text-transform: uppercase;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
   }
 }
 </style>
 
 
+<template>
+  <div class="keyboard-container">
+    <div class="key-row">
+      <button type="button" @click="$emit('key', 'q')" class="key-key">q</button>
+      <button type="button" @click="$emit('key', 'w')" class="key-key">w</button>
+      <button type="button" @click="$emit('key', 'e')" class="key-key">e</button>
+      <button type="button" @click="$emit('key', 'r')" class="key-key">r</button>
+      <button type="button" @click="$emit('key', 't')" class="key-key">t</button>
+      <button type="button" @click="$emit('key', 'y')" class="key-key">y</button>
+      <button type="button" @click="$emit('key', 'u')" class="key-key">u</button>
+      <button type="button" @click="$emit('key', 'i')" class="key-key">i</button>
+      <button type="button" @click="$emit('key', 'o')" class="key-key">o</button>
+      <button type="button" @click="$emit('key', 'p')" class="key-key">p</button>
+    </div>
+    <div class="key-row">
+      <div data-spacer="spacer" class="key-spacer"></div>
+      <button type="button" @click="$emit('key', 'a')" class="key-key">a</button>
+      <button type="button" @click="$emit('key', 's')" class="key-key">s</button>
+      <button type="button" @click="$emit('key', 'd')" class="key-key">d</button>
+      <button type="button" @click="$emit('key', 'f')" class="key-key">f</button>
+      <button type="button" @click="$emit('key', 'g')" class="key-key">g</button>
+      <button type="button" @click="$emit('key', 'h')" class="key-key">h</button>
+      <button type="button" @click="$emit('key', 'j')" class="key-key">j</button>
+      <button type="button" @click="$emit('key', 'k')" class="key-key">k</button>
+      <button type="button" @click="$emit('key', 'l')" class="key-key">l</button>
+      <div data-spacer="spacer" class="key-spacer"></div>
+    </div>
+    <div class="key-row">
+      <button type="button" @click="$emit('key', 'enter')" class="key-key key-enter">enter</button>
+      <button type="button" @click="$emit('key', 'z')" class="key-key">z</button>
+      <button type="button" @click="$emit('key', 'x')" class="key-key">x</button>
+      <button type="button" @click="$emit('key', 'c')" class="key-key">c</button>
+      <button type="button" @click="$emit('key', 'v')" class="key-key">v</button>
+      <button type="button" @click="$emit('key', 'b')" class="key-key">b</button>
+      <button type="button" @click="$emit('key', 'n')" class="key-key">n</button>
+      <button type="button" @click="$emit('key', 'm')" class="key-key">m</button>
+      <button type="button" @click="$emit('key', 'backspace')" class="key-key key-remove">del</button>
+    </div>
+  </div>
+</template>
+
 
 <script setup>
-import { ref } from 'vue';
-
-const answer = ref(' ')
-
-if (answer.value.length() > 5) {
-  answer.value.pop();
-}
-
-function parseAnswer() {
-  console.log(answer.value)
-  let chars = answer.value.split('');
+const getKey = (event) => {
+  console.log(event.target.innerHTML)
+  event.target.blur()
+  emit('key', event.target.innerHTML);
 }
 </script>
 
-function displayGuess() {
-  console.log(letterArray.value);
-}
-
-= answer.value.slice(0, answer.value.length - 1)
-
-
-let n = ref(0);
-
-const nextRow = (event) =>{
-  if (event.key === "Enter" && n.value < 5) {
-    //if(letterArray.value.length % 5 === 0) {
-      n.value++;
-      console.log(n.value)
-    //}
-  }
-}
-
-onMounted(() => {
-  document.addEventListener('keydown', nextRow);
-})
-onBeforeUnmount(() => {
-  document.removeEventListener('keydown', nextRow);
-  n.value = 0;
-})
+<template>
+  <div class="keyboard-container">
+    <div class="key-row">
+      <button type="button" @click="getKey" class="key-key">q</button>
+      <button type="button" @click="getKey" class="key-key">w</button>
+      <button type="button" @click="getKey" class="key-key">e</button>
+      <button type="button" @click="getKey" class="key-key">r</button>
+      <button type="button" @click="getKey" class="key-key">t</button>
+    </div>
+  </div>
+</template>
