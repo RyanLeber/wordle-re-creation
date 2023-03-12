@@ -1,8 +1,32 @@
 <!-- eslint-disable prettier/prettier -->
 <script setup>
+import { onUpdated } from 'vue';
+
+const props = defineProps({
+  checkObject: Object
+});
+
 const emits = defineEmits(['key']);
-defineProps({
-  checkKey: Array
+
+onUpdated(() => {
+  let key = props.checkObject;
+  let buttons = document.querySelectorAll('.key-key')
+  for (let button of buttons) {
+    for (let i = 0; i < 5; i++) {
+      if (button.innerHTML == key.guessArr[i]) {
+        if (key.keyArr[i] == 'yes') {
+          button.style.backgroundColor = '#b49f3b';
+        }
+        if (key.keyArr[i] == 'no') {
+          button.style.backgroundColor = '#3a3a3c';
+          button.disabled = true;
+        }
+        if (key.keyArr[i] == 'same') {
+          button.style.backgroundColor = '#538d4e';
+        }
+      }
+    }
+  }
 });
 
 const getKey = (event) => {
