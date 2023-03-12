@@ -1,247 +1,51 @@
+"parent component"
 <script setup>
-import WordleInput from "../components/WordleInput.vue";
-import KeyBoard from "../components/KeyBoard.vue";
-import CheckAnswer from "../components/CheckAnswer.vue";
-import { ref, reactive, onMounted, onBeforeUnmount } from 'vue'
-// change to reactive
-const letters = reactive({arr: []});
-//const emit = defineEmits(['response']);
-const currentGuess = ref(0);
-const lettersAmount = ref(5);
-const check = ref('');
+const checkObject = reactive({});
 
-function updateLetters(key) {
-  // New letter method
-  if (letters.arr.length < lettersAmount.value && /^[a-zA-Z]$/.test(key)) {
-    letters.arr.push(key);
-  }
-  // Backspace method
-  else if (key === "backspace") {
-    if (letters.arr.length > lettersAmount.value - 5) {
-      letters.arr.pop();
-    }
-  }
-  // Enter method
-  else if (key === "enter" && currentGuess.value < 6) {
-    if(letters.arr.length % 5 === 0) {
-      check.value = '';
-      for (let i = letters.arr.length - 5; i < lettersAmount.value; i++){
-        check.value += letters.arr[i];
-      }
-      console.log('1: ', check.value)
-      currentGuess.value++;
-      lettersAmount.value += 5;
-    }
-  }
+const appendCheckKey = (checkKey) =>{
+  checkObject.currentGuess = currentGuess;
+  checkObject.keyArr = checkKey;
+  checkObject.guessArr = check.value;
+  console.log(checkObject)
 }
+<script>
 
-const handleKeydown = (event) => {
-  // New letter method
-  if (letters.arr.length < lettersAmount.value && /^[a-zA-Z]$/.test(event.key)) {
-    letters.arr.push(event.key);
-  }
-  // Backspace method
-  else if (event.key === "Backspace") {
-    if (letters.arr.length > lettersAmount.value - 5) {
-      letters.arr.pop();
-    }
-  }
-  // Enter method
-  else if (event.key === "Enter" && currentGuess.value < 6) {
-    if(letters.arr.length % 5 === 0) {
-      check.value = '';
-      for (let i = letters.arr.length - 5; i < lettersAmount.value; i++){
-        check.value += letters.arr[i];
-      }
-      console.log('2: ', check.value)
-      currentGuess.value++;
-      lettersAmount.value += 5;
-    }
-  }
-}
-
-onMounted(() => {
-  document.addEventListener('keydown', handleKeydown);
-})
-onBeforeUnmount(() => {
-  document.removeEventListener('keydown', handleKeydown);
-  currentGuess.value = 0;
-})
-</script>
-
-<template>
-  <div class="input-container">
-    <WordleInput :guess="letters.arr" />
-  </div>
-  <div class="keyboard-container">
-    <KeyBoard @key="updateLetters" />
-  </div>
-  <div>
-    <CheckAnswer :check-guess="check" />
-  </div>
-</template>
-
-
-
-
-
-
-
-<!-- eslint-disable prettier/prettier -->
-<!-- eslint-disable prettier/prettier -->
+"Child component"
 <script setup>
+import { onUpdated } from 'vue';
+
 defineProps({
-  guess: Array
-})
+  checkObject: Object
+});
+
+onUpdated((checkObject) => {
+  console.log('recieved')
+  let buttons = document.querySelectorAll('.key-key')
+  for (let button of buttons) {
+    for (let i = 0; i < 5; i++) {
+      if (button.innerHTML == checkObject.guessArr[i]) {
+        if (checkObject.keyArr[i] == 'yes') {
+          button.style.backgroundColor = '#b49f3b';
+        }
+        if (checkObject.keyArr[i] == 'no') {
+          button.style.backgroundColor = '#3a3a3c';
+        }
+        if (checkObject.keyArr[i] == 'same') {
+          button.style.backgroundColor = '#538d4e';
+        }
+        button.disabled = true;
+      }
+    }
+  }
+});
 </script>
 
-<template>
-  <div class="answer-grid">
-    <div class="answer-row" id="row1">
-      <div class="answer-item">{{ guess[0] }}</div>
-      <div class="answer-item">{{ guess[1] }}</div>
-      <div class="answer-item">{{ guess[2] }}</div>
-      <div class="answer-item">{{ guess[3] }}</div>
-      <div class="answer-item">{{ guess[4] }}</div>
-    </div>
-    <div class="answer-row" id="row2">
-      <div class="answer-item">{{ guess[5] }}</div>
-      <div class="answer-item">{{ guess[6] }}</div>
-      <div class="answer-item">{{ guess[7] }}</div>
-      <div class="answer-item">{{ guess[8] }}</div>
-      <div class="answer-item">{{ guess[9] }}</div>
-    </div>
-    <div class="answer-row" id="row3">
-      <div class="answer-item">{{ guess[10] }}</div>
-      <div class="answer-item">{{ guess[11] }}</div>
-      <div class="answer-item">{{ guess[12] }}</div>
-      <div class="answer-item">{{ guess[13] }}</div>
-      <div class="answer-item">{{ guess[14] }}</div>
-    </div>
-    <div class="answer-row" id="row4">
-      <div class="answer-item">{{ guess[15] }}</div>
-      <div class="answer-item">{{ guess[16] }}</div>
-      <div class="answer-item">{{ guess[17] }}</div>
-      <div class="answer-item">{{ guess[18] }}</div>
-      <div class="answer-item">{{ guess[19] }}</div>
-    </div>
-    <div class="answer-row" id="row5">
-      <div class="answer-item">{{ guess[20] }}</div>
-      <div class="answer-item">{{ guess[21] }}</div>
-      <div class="answer-item">{{ guess[22] }}</div>
-      <div class="answer-item">{{ guess[23] }}</div>
-      <div class="answer-item">{{ guess[24] }}</div>
-    </div>
-    <div class="answer-row" id="row6">
-      <div class="answer-item">{{ guess[25] }}</div>
-      <div class="answer-item">{{ guess[26] }}</div>
-      <div class="answer-item">{{ guess[27] }}</div>
-      <div class="answer-item">{{ guess[28] }}</div>
-      <div class="answer-item">{{ guess[29] }}</div>
-    </div>
-  </div>
-</template>
 
-<style scoped>
-@media (min-width: 1024px) {
-  .container {
-    display: flex;
-  }
-  .answer-grid {
-    padding: 10px;
-    display: grid;
-    grid-template-rows: repeat(6, 1fr);
-    grid-gap: 5px;
-    box-sizing: border-box;
-    width: 300px;
-    height: 360px;
-  }
-  .answer-row {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    grid-gap: 5px;
-  }
-  .answer-item {
-    border: 2px solid;
-    border-color: var(--border-color);
-    width: 100%;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 2rem;
-    line-height: 1;
-    font-family: var(--guess-font);
-    font-weight: var(--guess-weight);
-    color: white;
-    vertical-align: middle;
-    box-sizing: border-box;
-    text-transform: uppercase;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    user-select: none;
-  }
+
+const appendCheckKey = (checkKey) =>{
+  let temp = {};
+  checkObject.value.currentGuess = currentGuess;
+  checkObject.value.keyArr = checkKey;
+  checkObject.value.guessArr = check.value;
+  console.log(checkObject.value)
 }
-</style>
-
-
-<template>
-  <div class="keyboard-container">
-    <div class="key-row">
-      <button type="button" @click="$emit('key', 'q')" class="key-key">q</button>
-      <button type="button" @click="$emit('key', 'w')" class="key-key">w</button>
-      <button type="button" @click="$emit('key', 'e')" class="key-key">e</button>
-      <button type="button" @click="$emit('key', 'r')" class="key-key">r</button>
-      <button type="button" @click="$emit('key', 't')" class="key-key">t</button>
-      <button type="button" @click="$emit('key', 'y')" class="key-key">y</button>
-      <button type="button" @click="$emit('key', 'u')" class="key-key">u</button>
-      <button type="button" @click="$emit('key', 'i')" class="key-key">i</button>
-      <button type="button" @click="$emit('key', 'o')" class="key-key">o</button>
-      <button type="button" @click="$emit('key', 'p')" class="key-key">p</button>
-    </div>
-    <div class="key-row">
-      <div data-spacer="spacer" class="key-spacer"></div>
-      <button type="button" @click="$emit('key', 'a')" class="key-key">a</button>
-      <button type="button" @click="$emit('key', 's')" class="key-key">s</button>
-      <button type="button" @click="$emit('key', 'd')" class="key-key">d</button>
-      <button type="button" @click="$emit('key', 'f')" class="key-key">f</button>
-      <button type="button" @click="$emit('key', 'g')" class="key-key">g</button>
-      <button type="button" @click="$emit('key', 'h')" class="key-key">h</button>
-      <button type="button" @click="$emit('key', 'j')" class="key-key">j</button>
-      <button type="button" @click="$emit('key', 'k')" class="key-key">k</button>
-      <button type="button" @click="$emit('key', 'l')" class="key-key">l</button>
-      <div data-spacer="spacer" class="key-spacer"></div>
-    </div>
-    <div class="key-row">
-      <button type="button" @click="$emit('key', 'enter')" class="key-key key-enter">enter</button>
-      <button type="button" @click="$emit('key', 'z')" class="key-key">z</button>
-      <button type="button" @click="$emit('key', 'x')" class="key-key">x</button>
-      <button type="button" @click="$emit('key', 'c')" class="key-key">c</button>
-      <button type="button" @click="$emit('key', 'v')" class="key-key">v</button>
-      <button type="button" @click="$emit('key', 'b')" class="key-key">b</button>
-      <button type="button" @click="$emit('key', 'n')" class="key-key">n</button>
-      <button type="button" @click="$emit('key', 'm')" class="key-key">m</button>
-      <button type="button" @click="$emit('key', 'backspace')" class="key-key key-remove">del</button>
-    </div>
-  </div>
-</template>
-
-
-<script setup>
-const getKey = (event) => {
-  console.log(event.target.innerHTML)
-  event.target.blur()
-  emit('key', event.target.innerHTML);
-}
-</script>
-
-<template>
-  <div class="keyboard-container">
-    <div class="key-row">
-      <button type="button" @click="getKey" class="key-key">q</button>
-      <button type="button" @click="getKey" class="key-key">w</button>
-      <button type="button" @click="getKey" class="key-key">e</button>
-      <button type="button" @click="getKey" class="key-key">r</button>
-      <button type="button" @click="getKey" class="key-key">t</button>
-    </div>
-  </div>
-</template>
