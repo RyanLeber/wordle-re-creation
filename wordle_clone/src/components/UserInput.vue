@@ -1,64 +1,59 @@
 <!-- eslint-disable prettier/prettier -->
 <script setup>
-import WordleInput from "../components/WordleInput.vue";
+import GuessTiles from "./GuessTiles.vue";
 import KeyBoard from "../components/KeyBoard.vue";
-import CheckAnswer from "../components/CheckAnswer.vue";
-import { ref, reactive, onMounted, onBeforeUnmount } from 'vue'
-// change to reactive
-const letters = reactive({arr: []});
-//const emit = defineEmits(['response']);
-const n = ref(0);
-const lettersAmount = ref(5);
-const check = ref('');
+import CheckGuess from "./CheckGuess.vue";
+import { ref, reactive, onMounted, onBeforeUnmount } from 'vue';
 
-function updateLetters(key) {
+const check = ref();
+const checkArr = ref();
+const guesses = reactive([
+  {guess: []},
+  {guess: []},
+  {guess: []},
+  {guess: []},
+  {guess: []},
+  {guess: []}
+]);
+let currentGuess = 0;
+
+function updateGuesses(key) {
   // New letter method
-  if (letters.arr.length < lettersAmount.value && /^[a-zA-Z]$/.test(key)) {
-    letters.arr.push(key);
+  if (guesses[currentGuess].guess.length < 5 && /^[a-zA-Z]$/.test(key)) {
+    guesses[currentGuess].guess.push(key)
   }
   // Backspace method
   else if (key === "backspace") {
-    if (letters.arr.length > lettersAmount.value - 5) {
-      letters.arr.pop();
-    }
+    guesses[currentGuess].guess.pop();
   }
   // Enter method
-  else if (key === "enter" && n.value < 6) {
-    if(letters.arr.length % 5 === 0) {
-      check.value = '';
-      for (let i = letters.arr.length - 5; i < lettersAmount.value; i++){
-        check.value += letters.arr[i];
-      }
-      console.log('1: ', check.value)
-      n.value++;
-      lettersAmount.value += 5;
-    }
+  else if (key === "enter" && guesses[currentGuess].guess.length == 5) {
+    check.value = guesses[currentGuess].guess;
+    console.log('1: ', check.value);
+    currentGuess++;
   }
 }
 
 const handleKeydown = (event) => {
   // New letter method
-  if (letters.arr.length < lettersAmount.value && /^[a-zA-Z]$/.test(event.key)) {
-    letters.arr.push(event.key);
+  if (guesses[currentGuess].guess.length < 5 && /^[a-zA-Z]$/.test(event.key)) {
+    guesses[currentGuess].guess.push(event.key)
   }
   // Backspace method
-  else if (event.key === "Backspace") {
-    if (letters.arr.length > lettersAmount.value - 5) {
-      letters.arr.pop();
-    }
+  if (event.key === "Backspace") {
+    guesses[currentGuess].guess.pop();
   }
   // Enter method
-  else if (event.key === "Enter" && n.value < 6) {
-    if(letters.arr.length % 5 === 0) {
-      check.value = '';
-      for (let i = letters.arr.length - 5; i < lettersAmount.value; i++){
-        check.value += letters.arr[i];
-      }
-      console.log('2: ', check.value)
-      n.value++;
-      lettersAmount.value += 5;
-    }
+  if (event.key === "Enter" && guesses[currentGuess].guess.length == 5) {
+    check.value = guesses[currentGuess].guess;
+    console.log('2: ', check.value);
+    currentGuess++;
   }
+}
+const appendCheckKey = (checkKey) =>{
+  checkArr.value = checkKey;
+  checkArr.value.push(currentGuess)
+  console.log(checkArr.value)
 }
 
 onMounted(() => {
@@ -66,19 +61,19 @@ onMounted(() => {
 })
 onBeforeUnmount(() => {
   document.removeEventListener('keydown', handleKeydown);
-  n.value = 0;
+  currentGuess = 0;
 })
 </script>
 
 <template>
   <div class="input-container">
-    <WordleInput :guess="letters.arr" />
+    <GuessTiles :guesses="guesses" :check-key="checkArr" />
   </div>
   <div class="keyboard-container">
-    <KeyBoard @key="updateLetters" />
+    <KeyBoard :check-key="checkArr" @key="updateGuesses" />
   </div>
   <div>
-    <CheckAnswer :check-guess="check" />
+    <CheckGuess :check-guess="check" @check-key="appendCheckKey" />
   </div>
 </template>
 
