@@ -8,7 +8,6 @@ const getGuess = defineProps({
   checkGuess: Array
 })
 
-
 const emits = defineEmits(['checkKey'])
 
 onUpdated(() => {
@@ -17,8 +16,8 @@ onUpdated(() => {
   if (guess.length > 0 && answer.length > 0) {
     const checkArr = [5];
     let count = 0;
-    console.log('answer: ', answer);
-    console.log('guess: ', guess);
+    //console.log('answer: ', answer);
+    //console.log('guess: ', guess);
     for (let i = 0; i < 5; i++) {
       let temp = count;
       for (let j = 0; j < 5; j++) {
@@ -39,12 +38,9 @@ onUpdated(() => {
     if (count === 5) {
       console.log('correct');
     }
-    else {
-      console.log('incorrect, count: ', count);
-    }
     emits('checkKey', checkArr)
   }
-})
+});
 
 
 async function getWord(event) {
