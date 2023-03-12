@@ -5,10 +5,11 @@ import { reactive, onUpdated } from 'vue';
 const getAnswer = reactive({answer: ''});
 
 const getGuess = defineProps({
-  checkGuess: String
+  checkGuess: Array
 })
 
-//const emit = defineEmits([5])
+
+const emits = defineEmits(['checkKey'])
 
 onUpdated(() => {
   let guess = getGuess['checkGuess'];
@@ -23,16 +24,16 @@ onUpdated(() => {
       for (let j = 0; j < 5; j++) {
         if (guess[i] === answer[j]) {
           if (i === j) {
-            checkArr[i] = 'sameIndex';
+            checkArr[i] = 'same';
           }
           else {
-            checkArr[i] = 'hasletter';
+            checkArr[i] = 'yes';
           }
           count = count + 1;
         }
       }
       if (temp === count) {
-        checkArr[i] = 'notIn';
+        checkArr[i] = 'no';
       }
     }
     if (count === 5) {
@@ -41,13 +42,13 @@ onUpdated(() => {
     else {
       console.log('incorrect, count: ', count);
     }
-    console.log(checkArr)
-    //emit(checkArr)
+    emits('checkKey', checkArr)
   }
 })
 
 
-async function getWord() {
+async function getWord(event) {
+  event.target.blur()
   const options = {
     method: 'GET',
 	  headers: {
