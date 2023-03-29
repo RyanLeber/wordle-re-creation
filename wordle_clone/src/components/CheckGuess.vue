@@ -1,23 +1,28 @@
 <!-- eslint-disable prettier/prettier -->
 <script setup>
-import { reactive, onUpdated } from 'vue';
+import { ref, onUpdated } from 'vue';
+import GetWord from "../components/GetWord.vue"
 
-const getAnswer = reactive({answer: ''});
+const newAnswer = ref('');
 
 const getGuess = defineProps({
   checkGuess: Array
 })
 
-const emits = defineEmits(['checkKey'])
+const emits = defineEmits(['checkKey', 'isCorrect'])
+
+const getAnswer = (answer) => {
+  newAnswer.value = answer;
+}
 
 onUpdated(() => {
   let guess = getGuess['checkGuess'];
-  let answer = getAnswer.answer.word;
-  if (guess.length > 0 && answer.length > 0) {
+  let answer = newAnswer.value;
+  console.log(getGuess['checkGuess'], answer)
+  if (guess && answer) {
     const checkArr = [5];
     let count = 0;
-    //console.log('answer: ', answer);
-    //console.log('guess: ', guess);
+    console.log(answer)
     for (let i = 0; i < 5; i++) {
       let temp = count;
       for (let j = 0; j < 5; j++) {
@@ -36,31 +41,14 @@ onUpdated(() => {
       }
     }
     if (count === 5) {
+      emits('isCorrect', true)
       console.log('correct');
     }
     emits('checkKey', checkArr)
   }
 });
-
-
-async function getWord(event) {
-  event.target.blur()
-  const options = {
-    method: 'GET',
-	  headers: {
-      'X-RapidAPI-Key': '14ef35e71fmsh23f5263afc6e55ep1e1633jsn9c3fbae78461',
-      'X-RapidAPI-Host': 'wordsapiv1.p.rapidapi.com'
-	  }
-  }
-  const res = await fetch(
-    'https://wordsapiv1.p.rapidapi.com/words/?random=true&letters=5',
-    options
-  );
-  getAnswer.answer = await res.json();
-  console.log(getAnswer.answer.word)
-}
 </script>
 
 <template>
-  <button @click="getWord">New Word</button>
+  <GetWord :newAnswer="newAnswer" @answer="getAnswer" />
 </template>

@@ -2,13 +2,13 @@
 <script setup>
 import { onUpdated } from 'vue';
 
+const emits = defineEmits(['key']);
 const props = defineProps({
-  checkObject: Object
+  checkObject: Object,
+  reset: Boolean
 });
 
-const emits = defineEmits(['key']);
-
-onUpdated(() => {
+function updateKeys() {
   let key = props.checkObject;
   let buttons = document.querySelectorAll('.key-key')
   for (let button of buttons) {
@@ -27,12 +27,27 @@ onUpdated(() => {
       }
     }
   }
-});
+}
+
+function resetKeys() {
+  let buttons = document.querySelectorAll('.key-key')
+  for (let button of buttons) {
+    button.style.backgroundColor = '#808384';
+    button.disabled = false;
+  }
+}
 
 const getKey = (event) => {
   event.target.blur();
   emits('key', event.target.innerHTML);
 }
+
+onUpdated(() => {
+  updateKeys();
+  if (props.reset == true) {
+    resetKeys();
+  }
+});
 </script>
 
 <template>

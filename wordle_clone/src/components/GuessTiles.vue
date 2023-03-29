@@ -1,55 +1,97 @@
 <!-- eslint-disable prettier/prettier -->
 <!-- eslint-disable prettier/prettier -->
 <script setup>
-defineProps({
+import { onUpdated } from 'vue';
+const props = defineProps({
   guesses: Array,
-  checkObject: Object
+  checkObject: Object,
+  reset: Boolean
+});
+
+let key;
+function updateTiles() {
+  if (key != props.checkObject){
+    key = props.checkObject;
+    let tiles = document.querySelectorAll('.answer-item')
+    for (let tile of tiles) {
+      for (let i = 0; i < 5; i++) {
+        if (tile.innerHTML == key.guessArr[i]) {
+          if (key.keyArr[i] == 'yes') {
+            tile.style.borderColor = '#b49f3b';
+            tile.style.backgroundColor = '#b49f3b';
+          }
+          if (key.keyArr[i] == 'no') {
+            tile.style.backgroundColor = '#3a3a3c';
+          }
+          if (key.keyArr[i] == 'same') {
+            tile.style.borderColor = '#538d4e';
+            tile.style.backgroundColor = '#538d4e';
+          }
+        }
+      }
+    }
+  }
+}
+
+function resetTiles() {
+  let tiles = document.querySelectorAll('.answer-item')
+  for (let tile of tiles) {
+    tile.style.backgroundColor = 'transparent';
+    tile.style.borderColor = '#3a3a3c';
+  }
+}
+
+onUpdated(() => {
+  updateTiles();
+  if (props.reset == true) {
+    resetTiles();
+  }
 });
 </script>
 
 <template>
   <div class="answer-grid">
     <div class="answer-row" id="row1">
-      <div class="answer-item">{{ guesses[0].guess[0] }}</div>
-      <div class="answer-item">{{ guesses[0].guess[1] }}</div>
-      <div class="answer-item">{{ guesses[0].guess[2] }}</div>
-      <div class="answer-item">{{ guesses[0].guess[3] }}</div>
-      <div class="answer-item">{{ guesses[0].guess[4] }}</div>
+      <div class="answer-item" >{{ guesses[0].guess[0] }}</div>
+      <div class="answer-item" >{{ guesses[0].guess[1] }}</div>
+      <div class="answer-item" >{{ guesses[0].guess[2] }}</div>
+      <div class="answer-item" >{{ guesses[0].guess[3] }}</div>
+      <div class="answer-item" >{{ guesses[0].guess[4] }}</div>
     </div>
     <div class="answer-row" id="row2">
-      <div class="answer-item">{{ guesses[1].guess[0] }}</div>
-      <div class="answer-item">{{ guesses[1].guess[1] }}</div>
-      <div class="answer-item">{{ guesses[1].guess[2] }}</div>
-      <div class="answer-item">{{ guesses[1].guess[3] }}</div>
-      <div class="answer-item">{{ guesses[1].guess[4] }}</div>
+      <div class="answer-item" >{{ guesses[1].guess[0] }}</div>
+      <div class="answer-item" >{{ guesses[1].guess[1] }}</div>
+      <div class="answer-item" >{{ guesses[1].guess[2] }}</div>
+      <div class="answer-item" >{{ guesses[1].guess[3] }}</div>
+      <div class="answer-item" >{{ guesses[1].guess[4] }}</div>
     </div>
     <div class="answer-row" id="row3">
-      <div class="answer-item">{{ guesses[2].guess[0] }}</div>
-      <div class="answer-item">{{ guesses[2].guess[1] }}</div>
-      <div class="answer-item">{{ guesses[2].guess[2] }}</div>
-      <div class="answer-item">{{ guesses[2].guess[3] }}</div>
-      <div class="answer-item">{{ guesses[2].guess[4] }}</div>
+      <div class="answer-item" >{{ guesses[2].guess[0] }}</div>
+      <div class="answer-item" >{{ guesses[2].guess[1] }}</div>
+      <div class="answer-item" >{{ guesses[2].guess[2] }}</div>
+      <div class="answer-item" >{{ guesses[2].guess[3] }}</div>
+      <div class="answer-item" >{{ guesses[2].guess[4] }}</div>
     </div>
     <div class="answer-row" id="row4">
-      <div class="answer-item">{{ guesses[3].guess[0] }}</div>
-      <div class="answer-item">{{ guesses[3].guess[1] }}</div>
-      <div class="answer-item">{{ guesses[3].guess[2] }}</div>
-      <div class="answer-item">{{ guesses[3].guess[3] }}</div>
-      <div class="answer-item">{{ guesses[3].guess[4] }}</div>
+      <div class="answer-item" >{{ guesses[3].guess[0] }}</div>
+      <div class="answer-item" >{{ guesses[3].guess[1] }}</div>
+      <div class="answer-item" >{{ guesses[3].guess[2] }}</div>
+      <div class="answer-item" >{{ guesses[3].guess[3] }}</div>
+      <div class="answer-item" >{{ guesses[3].guess[4] }}</div>
     </div>
     <div class="answer-row" id="row5">
-      <div class="answer-item">{{ guesses[4].guess[0] }}</div>
-      <div class="answer-item">{{ guesses[4].guess[1] }}</div>
-      <div class="answer-item">{{ guesses[4].guess[2] }}</div>
-      <div class="answer-item">{{ guesses[4].guess[3] }}</div>
-      <div class="answer-item">{{ guesses[4].guess[4] }}</div>
+      <div class="answer-item" >{{ guesses[4].guess[0] }}</div>
+      <div class="answer-item" >{{ guesses[4].guess[1] }}</div>
+      <div class="answer-item" >{{ guesses[4].guess[2] }}</div>
+      <div class="answer-item" >{{ guesses[4].guess[3] }}</div>
+      <div class="answer-item" >{{ guesses[4].guess[4] }}</div>
     </div>
     <div class="answer-row" id="row6">
-      <div class="answer-item">{{ guesses[5].guess[0] }}</div>
-      <div class="answer-item">{{ guesses[5].guess[1] }}</div>
-      <div class="answer-item">{{ guesses[5].guess[2] }}</div>
-      <div class="answer-item">{{ guesses[5].guess[3] }}</div>
-      <div class="answer-item">{{ guesses[5].guess[4] }}</div>
+      <div class="answer-item" >{{ guesses[5].guess[0] }}</div>
+      <div class="answer-item" >{{ guesses[5].guess[1] }}</div>
+      <div class="answer-item" >{{ guesses[5].guess[2] }}</div>
+      <div class="answer-item" >{{ guesses[5].guess[3] }}</div>
+      <div class="answer-item" >{{ guesses[5].guess[4] }}</div>
     </div>
   </div>
 </template>

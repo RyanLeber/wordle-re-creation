@@ -2,6 +2,8 @@
 <script setup>
 //import { RouterLink, RouterView } from "vue-router";
 import UserInput from "./components/UserInput.vue";
+import { provide } from 'vue'
+provide('newGame', true)
 </script>
 
 <template>
