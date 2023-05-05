@@ -49,3 +49,49 @@ const appendCheckKey = (checkKey) =>{
   checkObject.value.guessArr = check.value;
   console.log(checkObject.value)
 }
+
+const rotateTile = () => {
+  let divs = Array.from(document.querySelectorAll('.animate'));
+  let test = [];
+  divs.forEach(item => {
+      if (item.firstElementChild.innerHTML) {
+        test.push(item)
+      }
+    });
+  let angle = 0;
+  const id = setInterval(() => {
+    test.forEach(item => {
+      if (angle >= 360) {
+        clearInterval(id);
+      } 
+      else {
+        console.log(angle, item)
+        angle++;
+        item.style.transform = "rotateX(" + angle + "deg)";
+      }
+    });
+  }, 2);
+}
+
+const rotateTileTemp = () => {
+  let id = null;
+  let animateItems = Array.from(document.querySelectorAll('.animate'));
+  let angle = 0;
+  clearInterval(id);
+  animateItems.forEach(item => {
+    if (item.firstElementChild.innerHTML) {
+      id = setInterval(frame(item), 2);
+    }
+  });
+  function frame(item) {
+    if (angle >= 360) {
+      angle = 0;
+      clearInterval(id);
+    } 
+    else {
+      console.log('test')
+      angle++;
+      item.style.transform = "rotateX(" + angle + "deg)";
+    }
+  }
+}
