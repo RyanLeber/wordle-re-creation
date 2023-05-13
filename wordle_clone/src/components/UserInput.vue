@@ -2,11 +2,13 @@
 <script setup>
 import GuessTiles from "./GuessTiles.vue";
 import KeyBoard from "../components/KeyBoard.vue";
-import CheckGuess from "./CheckGuess.vue";
+import { loadCSV } from "../scripts/GetWord.js"
+import {checkGuess} from "../scripts/CheckGuess"
 import { ref, reactive, onMounted, onBeforeUnmount } from 'vue';
 
-const reset = ref(false)
-const check = ref();
+let answer;
+let currentGuess = 0;
+
 const checkObject = ref();
 const guesses = reactive([
   {guess: []},
@@ -17,75 +19,40 @@ const guesses = reactive([
   {guess: []}
 ]);
 
-let currentGuess = 0;
-let disabledKeys = [];
-
-function updateGuesses(key) {
+const updateGuesses = (key) => {
   // New letter method
   if (guesses[currentGuess].guess.length < 5 && /^[a-zA-Z]$/.test(key)) {
     guesses[currentGuess].guess.push(key)
   }
   // Backspace method
-  else if (key === "del") {
+  else if (key === "del" || key === "Backspace") {
     guesses[currentGuess].guess.pop();
   }
   // Enter method
-  else if (key === "enter" && guesses[currentGuess].guess.length == 5) {
-    check.value = guesses[currentGuess].guess;
-    //console.log('1: ', check.value);
+  else if (key.toLowerCase() === "enter" && guesses[currentGuess].guess.length == 5) {
+    appendCheckKey()
     currentGuess++;
   }
 }
 
 const handleKeydown = (event) => {
-  // New letter method
-  if (guesses[currentGuess].guess.length < 5 && /^[a-zA-Z]$/.test(event.key) && disabledKeys.indexOf(event.key) === -1) {
-    guesses[currentGuess].guess.push(event.key)
-  }
-  // Backspace method
-  if (event.key === "Backspace") {
-    guesses[currentGuess].guess.pop();
-  }
-  // Enter method
-  if (event.key === "Enter" && guesses[currentGuess].guess.length == 5) {
-    check.value = guesses[currentGuess].guess;
-    //console.log('2: ', check.value);
-    currentGuess++;
-  }
-}
-const appendCheckKey = (checkKey) => {
-  let temp = {};
-  temp.currentGuess = currentGuess;
-  temp.keyArr = checkKey;
-  temp.guessArr = check.value;
-  for (let i = 0; i < 5; i++) {
-    if (checkKey[i] === 'no') {
-      disabledKeys.push(check.value[i])
-    }
-  }
-  checkObject.value = temp;
+  updateGuesses(event.key)
 }
 
-const resetWordle = (isCorrect) => {
-  if(isCorrect) {
-    reset.value = true;
-    for (let i = 0; i < 6; i++) {
-      guesses[i].guess = null;
-    }
-    for (let key of disabledKeys) {
-      disabledKeys.pop();
-    }
-    check.value = null;
-    checkObject.value = null;
-    currentGuess = 0;
-  }
-  else {
-    reset.value = false;
-  }
+function appendCheckKey(){
+  let temp = {};
+  temp.currentGuess = currentGuess;
+  temp.keyArr = checkGuess(guesses[currentGuess].guess, answer);
+  temp.guessArr = guesses[currentGuess].guess;
+  checkObject.value = temp;
 }
 
 onMounted(() => {
   document.addEventListener('keydown', handleKeydown);
+  loadCSV().then((value) => {
+    answer = value
+    console.log(answer)
+  });
 })
 onBeforeUnmount(() => {
   document.removeEventListener('keydown', handleKeydown);
@@ -95,17 +62,10 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="input-container">
-    <GuessTiles :guesses="guesses" :check-object="checkObject" :reset="reset" />
+    <GuessTiles :guesses="guesses" :check-object="checkObject" />
   </div>
   <div class="keyboard-container">
-    <KeyBoard :check-object="checkObject" :reset="reset" @key="updateGuesses" />
-  </div>
-  <div>
-    <CheckGuess
-      :check-guess="check"
-      @check-key="appendCheckKey"
-      @is-correct="resetWordle"
-    />
+    <KeyBoard :check-object="checkObject" @key="updateGuesses" />
   </div>
 </template>
 
