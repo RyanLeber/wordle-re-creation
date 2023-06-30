@@ -1,53 +1,56 @@
-<!-- eslint-disable prettier/prettier -->
 <script setup>
-import { onUpdated } from 'vue';
+// Importing the watch function from Vue
+import { watch } from "vue";
 
-const emits = defineEmits(['key']);
+// Define the events that the component can emit
+const emits = defineEmits(["key"]);
+
+// Define properties that the component will receive
 const props = defineProps({
   checkObject: Object,
-  reset: Boolean
 });
 
-function updateKeys() {
-  let key = props.checkObject;
-  let buttons = document.querySelectorAll('.key-key')
-  for (let button of buttons) {
-    for (let i = 0; i < 5; i++) {
-      if (button.innerHTML == key.guessArr[i]) {
-        if (key.keyArr[i] == 'yes') {
-          button.style.backgroundColor = '#b49f3b';
+// Watch for changes in the readyToggle property of checkObject
+watch(
+  () => props.checkObject.readyToggle,
+  () => {
+    // Update the keys when the readyToggle property changes
+    updateKeys(props.checkObject);
+  }
+);
+
+// Function to update the keys based on the checkObject
+function updateKeys(key) {
+  let buttons = document.querySelectorAll(".key-key"); // Get all the keys
+  for (let i = 0; i < 5; i++) {
+    // Iterate over the keys
+    for (let button of buttons) {
+      // If the key value is the same as the guess and the key color is not green
+      if (
+        button.innerHTML == key.guessArr[i] &&
+        button.style.backgroundColor != "rgb(83, 141, 78)"
+      ) {
+        // Change the color of the key based on the guess result
+        if (key.checkedArr[i] == "yes") {
+          button.style.backgroundColor = "#b49f3b";
         }
-        if (key.keyArr[i] == 'no') {
-          button.style.backgroundColor = '#3a3a3c';
-          button.disabled = true;
+        if (key.checkedArr[i] == "no") {
+          button.style.backgroundColor = "#3a3a3c";
         }
-        if (key.keyArr[i] == 'same') {
-          button.style.backgroundColor = '#538d4e';
+        if (key.checkedArr[i] == "same") {
+          button.style.backgroundColor = "#538d4e";
         }
+        break;
       }
     }
   }
 }
 
-function resetKeys() {
-  let buttons = document.querySelectorAll('.key-key')
-  for (let button of buttons) {
-    button.style.backgroundColor = '#808384';
-    button.disabled = false;
-  }
-}
-
+// Function to emit the key event
 const getKey = (event) => {
-  event.target.blur();
-  emits('key', event.target.innerHTML);
-}
-
-onUpdated(() => {
-  updateKeys();
-  if (props.reset == true) {
-    resetKeys();
-  }
-});
+  // Emit the key event with the value of the clicked key
+  emits("key", event.target.innerHTML);
+};
 </script>
 
 <template>
